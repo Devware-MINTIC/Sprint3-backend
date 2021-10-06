@@ -47,7 +47,7 @@ class Server {
     this.app.use(express.json());
 
     // Public directory
-    this.app.use(express.static("public"));
+    // this.app.use(express.static("public"));
   }
 
   routes() {
