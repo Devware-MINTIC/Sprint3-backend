@@ -3,37 +3,37 @@ const { Schema, model } = require("mongoose");
 const saleSchema = Schema({
   totalValue: {
     type: String,
-    required: [true, "El nombre es obligatorio"],
-    unique: true,
+    required: [true, "El valor de la venta es obligatorio"],
   },
   totalProducts: {
-    type: Date,
-    required: [true, "El valor es obligatorio"],
+    type: String,
+    required: [true, "El total de productos es obligatorio"],
   },
-  products: {},
+  products: {
+    type: Array,
+    required: [true, "La lista de productos es obligatoria"],
+  },
   dateSale: {
     type: Date,
-    required: [true, "El valor es obligatorio"],
+    default: Date.now(),
   },
   state: {
-    type: Boolean,
-    default: true,
+    type: String,
+    default: "IN_PROGRESS",
     emun: ["IN_PROGRESS", "CANCELLED", "DELIVERED"],
   },
   customerIdNumber: {
     type: String,
-    required: [true, "El nombre es obligatorio"],
-    unique: true,
+    required: [true, "El documento de identidad del cliente es obligatorio"],
   },
   customerName: {
     type: String,
-    required: [true, "El nombre es obligatorio"],
-    unique: true,
+    required: [true, "El nombre del cliente es obligatorio"],
   },
   salesManager: {
-    type: String,
-    required: [true, "El nombre es obligatorio"],
-    unique: true,
+    type: Schema.Types.String,
+    ref: "User",
+    required: [true, "El encargado de la venta es obligatorio"],
   },
 });
 

@@ -3,74 +3,52 @@ const router = Router();
 const { check } = require("express-validator");
 
 const { validateInputs, validateJWT, allowTo } = require("../middlewares");
-const { existProduct, existProductById } = require("../helpers/dbValidators");
+const { existSaleById, isValidSaleState } = require("../helpers/dbValidators");
 const {
-  getProducts,
-  getProductById,
-  createProduct,
-  updateProductById,
-} = require("../controllers/products");
+  getSales,
+  createSale,
+  updateSaleById,
+} = require("../controllers/sales");
 
-router.get("/", [validateJWT, allowTo("ADMIN")], getProducts);
+router.get("/", [validateJWT, allowTo("ADMIN", "SELLER")], getSales);
 
 router.post(
   "/create",
   [
     validateJWT,
-    allowTo("ADMIN"),
+    allowTo("ADMIN", "SELLER"),
 
-    check("name", "El nombre del producto es obligatorio")
+    check("products", "El/los producto/s son obligatorio").isArray().notEmpty(),
+    check("customerIdNumber", "La identidad del cliente es obligatorio")
       .isString()
       .notEmpty(),
-    check("name").custom(existProduct),
-
-    check("value", "El valor del producto es obligatorio")
-      .isNumeric()
+    check("customerName", "El nombre del cliente es obligatorio")
+      .isString()
       .notEmpty(),
-
-    check("state", "El estado del producto es obligatorio")
-      .isBoolean()
+    check("salesManager", "El encargado de la venta es obligatorio")
+      .isEmail()
       .notEmpty(),
 
     validateInputs,
   ],
-  createProduct
-);
-
-router.post(
-  "/",
-  [
-    validateJWT,
-    allowTo("ADMIN"),
-
-    check("uid", "No es un ID de usuario válido").isMongoId(),
-    check("uid", "El ID del usuario es obligatorio").notEmpty(),
-    check("uid").custom(existProductById),
-
-    validateInputs,
-  ],
-  getProductById
+  createSale
 );
 
 router.put(
   "/",
   [
     validateJWT,
-    allowTo("ADMIN"),
+    allowTo("ADMIN", "SELLER"),
 
     check("uid", "No es un ID de producto válido").isMongoId(),
     check("uid", "El ID del producto es obligatorio").notEmpty(),
-    check("uid").custom(existProductById),
+    check("uid").custom(existSaleById),
 
-    check("name").optional().isString().custom(existProduct),
-
-    check("value").optional().isNumeric(),
-
-    check("state").optional().isBoolean(),
+    check("state").isString().custom(isValidSaleState),
 
     validateInputs,
   ],
-  updateProductById
+  updateSaleById
 );
 
 module.exports = router;

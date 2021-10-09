@@ -1,4 +1,4 @@
-const { User, Category, Product } = require("../models");
+const { User, Product, Sale } = require("../models");
 
 const isValidRole = async (role = "") => {
   if (!(role === "ADMIN" || role === "VENDOR")) {
@@ -13,6 +13,14 @@ const isValidState = async (state = "") => {
       state === "AUTHORIZED" ||
       state === "NO_AUTHORIZED"
     )
+  ) {
+    throw new Error(`El estado ${state ? state : "VACIO"} no es permitido`);
+  }
+};
+
+const isValidSaleState = async (state = "") => {
+  if (
+    !(state === "IN_PROGRESS" || state === "CANCELLED" || state === "DELIVERED")
   ) {
     throw new Error(`El estado ${state ? state : "VACIO"} no es permitido`);
   }
@@ -46,11 +54,20 @@ const existProductById = async (id) => {
   }
 };
 
+const existSaleById = async (id) => {
+  const existProduct = await Sale.findById(id);
+  if (!existProduct) {
+    throw new Error(`La venta con id ${id} no existe`);
+  }
+};
+
 module.exports = {
   isValidRole,
   isValidState,
+  isValidSaleState,
   existEmail,
   existProduct,
   existUserById,
   existProductById,
+  existSaleById,
 };
