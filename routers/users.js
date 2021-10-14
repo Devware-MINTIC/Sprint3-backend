@@ -40,9 +40,6 @@ router.put(
     check("uid", "El ID del usuario es obligatorio").notEmpty(),
     check("uid").custom(existUserById),
 
-    check("email", "No es un email valido").optional().isEmail(),
-    check("email").custom(existEmail),
-
     check("role").optional().custom(isValidRole),
 
     check("state").optional().custom(isValidState),

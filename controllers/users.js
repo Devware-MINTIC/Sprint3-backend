@@ -16,8 +16,8 @@ const getUserById = async (req = request, res = response) => {
 };
 
 const updateUserById = async (req = request, res = response) => {
-  const { uid, email, role, state } = req.body;
-  if (!(email || role || state)) {
+  const { uid, role, state } = req.body;
+  if (!(role || state)) {
     res.status(200).json({
       statusCode: 200,
       message: "Usuario no modificado",
@@ -25,7 +25,6 @@ const updateUserById = async (req = request, res = response) => {
   }
 
   const userUpdated = {};
-  if (email) userUpdated["email"] = email;
   if (role) userUpdated["role"] = role;
   if (state) userUpdated["state"] = state;
 
