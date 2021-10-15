@@ -11,7 +11,7 @@ const {
   updateProductById,
 } = require("../controllers/products");
 
-router.get("/", [validateJWT, allowTo("ADMIN")], getProducts);
+router.get("/", [validateJWT, allowTo("ADMIN", "SELLER")], getProducts);
 
 router.post(
   "/create",
