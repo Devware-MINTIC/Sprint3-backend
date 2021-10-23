@@ -62,7 +62,7 @@ router.put(
     check("uid", "El ID del producto es obligatorio").notEmpty(),
     check("uid").custom(existProductById),
 
-    check("name").optional().isString().custom(existProduct),
+    check("name").optional().isString(),
 
     check("value").optional().isNumeric(),
 
